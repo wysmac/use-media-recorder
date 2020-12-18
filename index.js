@@ -123,9 +123,20 @@ function useMediaRecorder({
   }
 
   function clearMediaStream() {
-    if (mediaStream.current) {
-      mediaStream.current.getTracks().forEach(track => track.stop());
-      mediaStream.current = null;
+    if (mediaRecorder.current) {
+      mediaRecorder.current.removeEventListener(
+        'dataavailable',
+        handleDataAvailable
+      );
+      mediaRecorder.current.removeEventListener('stop', handleStop);
+      mediaRecorder.current.removeEventListener('error', handleError);
+      mediaRecorder.current = null;
+    
+      if (mediaStream.current) {
+        mediaStream.current.getTracks().forEach(track => track.stop());
+        mediaStream.current = null;
+        mediaChunks.current = [];
+      }    
     }
   }
 
@@ -133,12 +144,10 @@ function useMediaRecorder({
     if (error) {
       setError(null);
     }
-
     if (!mediaStream.current) {
       await getMediaStream();
     }
-    
-    mediaChunks.current = []
+    mediaChunks.current = [];
 
     if (mediaStream.current) {
       mediaRecorder.current = new MediaRecorder(
@@ -172,8 +181,8 @@ function useMediaRecorder({
     );
     let blob = new Blob(mediaChunks.current, blobPropertyBag);
 
-    setMediaBlob(blob);
     setStatus('stopped');
+    setMediaBlob(blob);
     onStop(blob);
   }
 
