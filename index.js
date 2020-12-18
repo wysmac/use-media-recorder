@@ -131,12 +131,12 @@ function useMediaRecorder({
       mediaRecorder.current.removeEventListener('stop', handleStop);
       mediaRecorder.current.removeEventListener('error', handleError);
       mediaRecorder.current = null;
-    
-      if (mediaStream.current) {
-        mediaStream.current.getTracks().forEach(track => track.stop());
-        mediaStream.current = null;
-        mediaChunks.current = [];
-      }    
+    }
+
+    if (mediaStream.current) {
+      mediaStream.current.getTracks().forEach(track => track.stop());
+      mediaStream.current = null;
+      mediaChunks.current = [];
     }
   }
 
@@ -144,9 +144,11 @@ function useMediaRecorder({
     if (error) {
       setError(null);
     }
+
     if (!mediaStream.current) {
       await getMediaStream();
     }
+
     mediaChunks.current = [];
 
     if (mediaStream.current) {
