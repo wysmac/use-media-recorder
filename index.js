@@ -263,6 +263,10 @@ function useMediaRecorder({
     }
   }, [mediaStreamConstraints, mediaRecorderOptions, recordScreen]);
 
+  function clearBlob() {
+    setMediaBlob(null);
+  }
+
   return {
     error,
     status,
@@ -274,6 +278,7 @@ function useMediaRecorder({
     pauseRecording,
     resumeRecording,
     clearMediaStream,
+    clearBlob,
     muteAudio: () => muteAudio(true),
     unMuteAudio: () => muteAudio(false),
     get liveStream() {
