@@ -31,6 +31,7 @@ export interface MediaRecorderHookOptions {
   resumeRecording: () => void;
   muteAudio: () => void;
   unMuteAudio: () => void;
+  clearBlob:() => void;
   liveStream: MediaStream;
 }
 
